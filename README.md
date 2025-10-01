@@ -10,6 +10,18 @@
 
 [▶️ Model Uydu Tanıtım Videosu (LinkedIn)](https://www.linkedin.com/posts/nurullahsahinn_taesrksat-teknofest-modeluydu-activity-7361415194155040769-peXQ?utm_source=share&utm_medium=member_desktop&rcm=ACoAADk6ykIBxQMI8iO9VxnYcCEeqIe3bIY4YS8)
 
+<div align="center">
+
+<img src="./images/1.jpg" width="260" />
+<img src="./images/2.png" width="260" />
+<img src="./images/3.png" width="260" />
+<br/>
+<img src="./images/4.png" width="260" />
+<img src="./images/5.png" width="260" />
+<img src="./images/6.jpg" width="260" />
+
+</div>
+
 **Sıfırdan geliştirilen, uçtan uca model uydu yazılım mimarisi**  
 *Tam otomatik telemetri, video akışı, IoT haberleşme ve ayrılma kontrolü*
 
