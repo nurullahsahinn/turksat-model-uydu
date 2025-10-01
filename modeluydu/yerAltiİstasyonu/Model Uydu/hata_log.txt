@@ -1,0 +1,62 @@
+Zaman - Hata Bilgisi
+2025-05-22 15:28:08 - Hata log dosyası oluşturuldu: hata_log.txt
+2025-05-22 15:28:08 - Chart2 yapılandırılamadı: Dizin aralık dışındaydı. Negatif bir değer olmamalı ve koleksiyonun boyutundan daha küçük olmalıdır.
+Parametre adı: index
+2025-05-22 15:28:08 - Harita yapılandırması başarıyla tamamlandı.
+2025-05-22 15:28:08 - Kamera sistemi başlatıldı.
+2025-05-22 15:28:08 - SD kart simülasyon dizini oluşturuldu: SD_Kart_Simulasyon
+2025-05-22 15:28:08 - SD kart simülasyonu başlatıldı.
+2025-05-22 15:28:08 - Uyarı: Ses dosyası bulunamadı. Console.Beep kullanılacak.
+2025-05-22 15:28:08 - Multi-Spektral Filtre Yöneticisi: Alarm sistemi referansı ayarlandı.
+2025-05-22 15:28:08 - IoT İstasyon 1 bağlantısı başarılı: COM3
+2025-05-22 15:28:08 - IoT İstasyon 2 bağlantısı başarılı: COM11
+2025-05-22 15:28:08 - IoT simülasyon verileri üretildi: S1=25,7°C, S2=27,9°C
+2025-05-22 15:28:08 - Telemetri Yöneticisi başlatıldı
+2025-05-22 15:28:26 - Kamera kaynakları serbest bırakıldı.
+2025-05-22 15:33:59 - Chart2 yapılandırılamadı: Dizin aralık dışındaydı. Negatif bir değer olmamalı ve koleksiyonun boyutundan daha küçük olmalıdır.
+Parametre adı: index
+2025-05-22 15:33:59 - Harita yapılandırması başarıyla tamamlandı.
+2025-05-22 15:33:59 - Kamera sistemi başlatıldı.
+2025-05-22 15:33:59 - SD kart simülasyonu başlatıldı.
+2025-05-22 15:33:59 - Uyarı: Ses dosyası bulunamadı. Console.Beep kullanılacak.
+2025-05-22 15:33:59 - Multi-Spektral Filtre Yöneticisi: Alarm sistemi referansı ayarlandı.
+2025-05-22 15:33:59 - IoT İstasyon 1 bağlantısı başarılı: COM3
+2025-05-22 15:33:59 - IoT İstasyon 2 bağlantısı başarılı: COM11
+2025-05-22 15:33:59 - IoT simülasyon verileri üretildi: S1=21°C, S2=24,7°C
+2025-05-22 15:33:59 - Telemetri Yöneticisi başlatıldı
+2025-05-22 15:34:03 - Kamera kaynakları serbest bırakıldı.
+2025-07-11 02:28:26 - Harita yapılandırması başarıyla tamamlandı.
+2025-07-11 02:28:26 - Görev yükü video sistemi başlatıldı.
+2025-07-11 02:28:26 - SD kart simülasyonu başlatıldı.
+2025-07-11 02:28:26 - Multi-Spektral Filtre Yöneticisi: Alarm sistemi referansı ayarlandı.
+2025-07-11 02:28:26 - IoT İstasyon 1 bağlantısı başarılı: COM3
+2025-07-11 02:28:26 - IoT İstasyon 2 bağlantısı başarılı: COM11
+2025-07-11 02:28:26 - Telemetri Yöneticisi başlatıldı
+2025-07-11 02:28:27 - 📊 DataGridView extreme kompakt konfigürasyonu tamamlandı (22 sütun emoji ile)
+2025-07-11 02:28:29 - 🚀 Yeni Test Uçuşu Başlatıldı. Hedef Tepe İrtifa: 627m
+2025-07-11 02:28:29 - Test modu başlatıldı. Sahte veriler gönderiliyor...
+2025-07-11 02:28:29 - Test modu başlatıldı. Sahte telemetri verileri gönderiliyor.
+2025-07-11 02:28:31 - Checksum doğrulandı. Paket: 1,0,000000,02:28:31,1013.03,1013.31,1.8,2.8,1.0,0.0,14.5,11.99,41.275316,28.751909,-2.6,19,-86,-130,174,34.3,21.5,286570
+2025-07-11 02:28:33 - Checksum doğrulandı. Paket: 2,0,000000,02:28:33,1013.04,1012.75,1.8,0.4,1.3,0.0,15.7,11.97,41.275410,28.751803,0.2,-15,67,177,144,16.4,15.2,286570
+2025-07-11 02:28:35 - 🔍 ARAS (Paket 3): Kod=000100, Faz=UCUSA_HAZIR, Yükseklik=2m, Hız=0,0m/s
+2025-07-11 02:28:35 - Checksum doğrulandı. Paket: 3,0,000100,02:28:35,1013.03,1013.48,1.8,1.9,0.1,0.0,15.4,11.96,41.275313,28.751951,-1.3,-32,-24,15,178,16.8,25.9,286570
+2025-07-11 02:28:36 - 🚨 YENİ ARAS HATASI 4: GPS Verisi (Bit 3)
+2025-07-11 02:28:36 - 🎵 ARAS Uyarısı (Beep): Görev Yükü Konum Verisi Hatası
+2025-07-11 02:28:37 - Görev yükü video stream'i başlatıldı.
+2025-07-11 02:28:37 - 🎥 Video stream başlatma sinyali gönderildi. (Yeşil buton)
+2025-07-11 02:28:37 - Checksum doğrulandı. Paket: 4,0,000000,02:28:37,1012.99,1013.03,2.2,3.0,0.8,0.0,14.1,11.94,41.275257,28.752018,4.6,-13,79,-152,55,17.3,23.5,286570
+2025-07-11 02:28:38 - ✅ Tüm hatalar giderildi - Sesler durdu
+2025-07-11 02:28:38 - Video kaydı başlatıldı: GorevYuku_Video_20250711_022838.avi
+2025-07-11 02:28:39 - Video kaydı durduruldu.
+2025-07-11 02:28:39 - Video stream durduruldu.
+2025-07-11 02:28:39 - Video stream durduruldu.
+2025-07-11 02:28:39 - Video frame gönderimi geçici olarak devre dışı (hata önlemek için)
+2025-07-11 02:28:39 - Checksum doğrulandı. Paket: 5,0,000000,02:28:39,1012.98,1013.90,2.3,3.0,0.7,0.0,14.1,11.93,41.275309,28.752125,6.1,72,10,-50,159,31.4,23.3,286570
+2025-07-11 02:28:40 - Görev yükü video stream'i başlatıldı.
+2025-07-11 02:28:40 - 🎥 Video stream başlatma sinyali gönderildi. (Yeşil buton)
+2025-07-11 02:28:41 - ✈️ Faz Değişimi: TIRMANIS. 627m hedefine tırmanış başladı.
+2025-07-11 02:28:41 - Checksum doğrulandı. Paket: 6,1,000000,02:28:41,1012.99,1013.35,2.2,3.5,1.4,0.0,15.3,11.91,41.275183,28.752185,-1.4,55,57,-173,110,26.3,13.5,286570
+2025-07-11 02:28:42 - Video stream durduruldu.
+2025-07-11 02:28:42 - Kamera yöneticisi kapatıldı.
+2025-07-11 02:28:42 - SD kart yöneticisi kaynakları serbest bırakıldı.
+2025-07-11 02:28:42 - BİLGİ: ExcelVeriAktarmaYoneticisi kaynakları temizlendi.

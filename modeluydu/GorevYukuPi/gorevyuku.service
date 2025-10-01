@@ -1,0 +1,21 @@
+[Unit]
+Description=TURKSAT Model Uydu Gorev Yuku Sistemi
+After=network.target pigpiod.service
+Wants=pigpiod.service
+
+[Service]
+Type=simple
+User=atugem
+Group=atugem
+WorkingDirectory=/home/atugem/TurkSatModelUydu/GorevYukuPi
+ExecStartPre=/bin/sleep 10
+ExecStart=/usr/bin/python3 ana_program.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONPATH=/home/atugem/TurkSatModelUydu/GorevYukuPi
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

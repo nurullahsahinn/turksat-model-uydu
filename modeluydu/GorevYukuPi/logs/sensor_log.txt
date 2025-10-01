@@ -1,0 +1,50 @@
+2025-08-03 12:11:35,071 - IMUSensorYoneticisi - INFO - IMU sensörleri simülasyon modunda baþlatýldý
+2025-08-03 12:11:35,095 - RTCYoneticisi - INFO - DS3231 simülasyon modu
+2025-08-03 12:11:35,095 - PilGerilimiYoneticisi - INFO - ADS1115 simülasyon modu
+2025-08-03 12:11:35,097 - PilGerilimiYoneticisi - INFO - Pil gerilimi izleme simülasyon modunda baþlatýldý
+2025-08-03 12:11:35,097 - SensorManager - INFO - GPS Durumu: Aktif
+2025-08-03 12:11:35,098 - SensorManager - INFO - BMP280 Durumu: Pasif
+2025-08-03 12:11:35,100 - SensorManager - INFO - IMU Durumu: Aktif
+2025-08-03 12:11:35,100 - SensorManager - INFO - RTC Durumu: Aktif
+2025-08-03 12:11:35,102 - SensorManager - INFO - Pil Durumu: Aktif
+2025-08-03 12:11:35,103 - RTCYoneticisi - INFO - RTC kaynaklarý temizlendi
+2025-08-03 12:11:35,105 - IMUSensorYoneticisi - INFO - IMU sensörleri simülasyon modunda baþlatýldý
+2025-08-03 12:11:35,105 - RTCYoneticisi - INFO - DS3231 simülasyon modu
+2025-08-03 12:11:35,106 - PilGerilimiYoneticisi - INFO - ADS1115 simülasyon modu
+2025-08-03 12:11:35,106 - PilGerilimiYoneticisi - INFO - Pil gerilimi izleme simülasyon modunda baþlatýldý
+2025-08-03 12:11:35,108 - SensorManager - INFO - GPS Durumu: Aktif
+2025-08-03 12:11:35,109 - SensorManager - INFO - BMP280 Durumu: Pasif
+2025-08-03 12:11:35,109 - SensorManager - INFO - IMU Durumu: Aktif
+2025-08-03 12:11:35,109 - SensorManager - INFO - RTC Durumu: Aktif
+2025-08-03 12:11:35,111 - SensorManager - INFO - Pil Durumu: Aktif
+2025-08-03 12:11:37,657 - RTCYoneticisi - INFO - RTC kaynaklarý temizlendi
+2025-08-03 12:14:52,153 - IMUSensorYoneticisi - INFO - IMU sensörleri simülasyon modunda baþlatýldý
+2025-08-03 12:14:52,169 - RTCYoneticisi - INFO - DS3231 simülasyon modu
+2025-08-03 12:14:52,170 - PilGerilimiYoneticisi - INFO - ADS1115 simülasyon modu
+2025-08-03 12:14:52,171 - PilGerilimiYoneticisi - INFO - Pil gerilimi izleme simülasyon modunda baþlatýldý
+2025-08-03 12:14:52,172 - SensorManager - INFO - GPS Durumu: Aktif
+2025-08-03 12:14:52,173 - SensorManager - INFO - BMP280 Durumu: Pasif
+2025-08-03 12:14:52,173 - SensorManager - INFO - IMU Durumu: Aktif
+2025-08-03 12:14:52,174 - SensorManager - INFO - RTC Durumu: Aktif
+2025-08-03 12:14:52,175 - SensorManager - INFO - Pil Durumu: Aktif
+2025-08-03 12:14:53,720 - RTCYoneticisi - INFO - RTC kaynaklarý temizlendi
+2025-08-03 13:06:49,267 - IMUSensorYoneticisi - INFO - IMU sensörleri simülasyon modunda baþlatýldý
+2025-08-03 13:06:49,270 - RTCYoneticisi - INFO - DS3231 simülasyon modu
+2025-08-03 13:06:49,271 - PilGerilimiYoneticisi - INFO - ADS1115 simülasyon modu
+2025-08-03 13:06:49,272 - PilGerilimiYoneticisi - INFO - Pil gerilimi izleme simülasyon modunda baþlatýldý
+2025-08-03 13:06:49,272 - SensorManager - INFO - GPS Durumu: Aktif
+2025-08-03 13:06:49,273 - SensorManager - INFO - BMP280 Durumu: Pasif
+2025-08-03 13:06:49,274 - SensorManager - INFO - IMU Durumu: Aktif
+2025-08-03 13:06:49,274 - SensorManager - INFO - RTC Durumu: Aktif
+2025-08-03 13:06:49,275 - SensorManager - INFO - Pil Durumu: Aktif
+2025-08-03 13:06:50,816 - RTCYoneticisi - INFO - RTC kaynaklarý temizlendi
+2025-08-03 13:14:27,036 - IMUSensorYoneticisi - INFO - IMU sensörleri simülasyon modunda baþlatýldý
+2025-08-03 13:14:27,039 - RTCYoneticisi - INFO - DS3231 simülasyon modu
+2025-08-03 13:14:27,040 - PilGerilimiYoneticisi - INFO - ADS1115 simülasyon modu
+2025-08-03 13:14:27,041 - PilGerilimiYoneticisi - INFO - Pil gerilimi izleme simülasyon modunda baþlatýldý
+2025-08-03 13:14:27,042 - SensorManager - INFO - GPS Durumu: Aktif
+2025-08-03 13:14:27,043 - SensorManager - INFO - BMP280 Durumu: Pasif
+2025-08-03 13:14:27,043 - SensorManager - INFO - IMU Durumu: Aktif
+2025-08-03 13:14:27,044 - SensorManager - INFO - RTC Durumu: Aktif
+2025-08-03 13:14:27,044 - SensorManager - INFO - Pil Durumu: Aktif
+2025-08-03 13:14:27,057 - RTCYoneticisi - INFO - RTC kaynaklarý temizlendi

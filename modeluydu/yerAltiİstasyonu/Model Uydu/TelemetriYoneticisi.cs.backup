@@ -1,0 +1,567 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO.Ports;
+using System.IO;
+
+namespace ModelUydu
+{
+    /// <summary>
+    /// Telemetri verilerinin alınması, işlenmesi ve görüntülenmesi işlevlerini yöneten sınıf
+    /// </summary>
+    public class TelemetriYoneticisi
+    {
+        // Seri port
+        private SerialPort serialPort;
+        
+        // Zamanlayıcı
+        private System.Windows.Forms.Timer zamanlayici;
+        
+        // UI bileşenleri
+        private DataGridView dataGridView;
+        private Button baglanButonu;
+        private Button kesButonu;
+        private Label durumEtiketi;
+        private ComboBox portListesi;
+        private TextBox baudRateTextBox;
+        
+        // Telemetri veri alanları için TextBox kontrollerini tutacak sözlük
+        private Dictionary<string, Control> veriKontrolleri = new Dictionary<string, Control>();
+        
+        // Veri düğüm noktaları - Form1 ile etkileşim için
+        private Action<string> uyduDurumGuncelle;      // Uydu durumunu güncellemek için 
+        private Action<int, int, int> gyroGuncelle;    // 3D modeli güncellemek için
+        private Action<double, double> haritaGuncelle; // Harita konumunu güncellemek için
+        private Action<string> hataKoduGuncelle;       // Hata kodunu güncellemek için
+        private Action<string, bool> logHata;          // Hata loglama için
+        private Action<string> telemetriKaydet;        // Telemetri verilerini kaydetmek için
+        private Action<DateTime, string, string, string, string, string> grafikleriGuncelle; // Grafikleri güncellemek için
+        
+        /// <summary>
+        /// TelemetriYoneticisi sınıfı yapıcı metodu
+        /// </summary>
+        public TelemetriYoneticisi(
+            DataGridView dataGridView, 
+            Button baglanButonu, 
+            Button kesButonu,
+            Label durumEtiketi,
+            ComboBox portListesi,
+            TextBox baudRateTextBox,
+            Dictionary<string, Control> veriKontrolleri,
+            Action<string> uyduDurumGuncelle,
+            Action<int, int, int> gyroGuncelle,
+            Action<double, double> haritaGuncelle,
+            Action<string> hataKoduGuncelle,
+            Action<string, bool> logHata,
+            Action<string> telemetriKaydet,
+            Action<DateTime, string, string, string, string, string> grafikleriGuncelle)
+        {
+            // UI bileşenlerini ayarla
+            this.dataGridView = dataGridView;
+            this.baglanButonu = baglanButonu;
+            this.kesButonu = kesButonu;
+            this.durumEtiketi = durumEtiketi;
+            this.portListesi = portListesi;
+            this.baudRateTextBox = baudRateTextBox;
+            this.veriKontrolleri = veriKontrolleri;
+            
+            // Veri düğüm noktaları
+            this.uyduDurumGuncelle = uyduDurumGuncelle;
+            this.gyroGuncelle = gyroGuncelle;
+            this.haritaGuncelle = haritaGuncelle;
+            this.hataKoduGuncelle = hataKoduGuncelle;
+            this.logHata = logHata;
+            this.telemetriKaydet = telemetriKaydet;
+            this.grafikleriGuncelle = grafikleriGuncelle;
+            
+            // Seri port nesnesini oluştur
+            serialPort = new SerialPort();
+            serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
+            
+            // Zamanlayıcıyı oluştur
+            zamanlayici = new System.Windows.Forms.Timer();
+            zamanlayici.Interval = 1000; // 1 saniye
+            zamanlayici.Tick += new EventHandler(Zamanlayici_Tick);
+            
+            // Seri port listesini doldur
+            DoldurPortListesi();
+            
+            // Buton olaylarını ayarla
+            baglanButonu.Click += Baglan_Click;
+            kesButonu.Click += Kes_Click;
+        }
+        
+        /// <summary>
+        /// Seri port listesini dolduran metod
+        /// </summary>
+        public void DoldurPortListesi()
+        {
+            try
+            {
+                // Mevcut listeyi temizle
+                portListesi.Items.Clear();
+                
+                // Seri portları listele
+                string[] portlar = SerialPort.GetPortNames();
+                foreach (string portAdi in portlar)
+                {
+                    portListesi.Items.Add(portAdi);
+                }
+                
+                // Varsayılan port seçimi
+                if (portListesi.Items.Count > 0)
+                {
+                    portListesi.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("Port listesi doldurulurken hata: " + ex.Message, true);
+            }
+        }
+        
+        /// <summary>
+        /// Seri porta bağlanma olayı
+        /// </summary>
+        private void Baglan_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Port ve baud rate ayarları
+                serialPort.BaudRate = Convert.ToInt32(baudRateTextBox.Text);
+                serialPort.PortName = portListesi.Text;
+                
+                // Port açık değilse
+                if (!serialPort.IsOpen)
+                {
+                    zamanlayici.Start(); // Zamanlayıcıyı başlat
+                    serialPort.Open(); // Portu aç
+                    baglanButonu.Enabled = false; // Bağlan butonunu devre dışı bırak
+                    kesButonu.Enabled = true; // Kes butonunu etkinleştir
+                    
+                    // Durum etiketini güncelle
+                    durumEtiketi.Text = "Bağlantı kuruldu";
+                    durumEtiketi.ForeColor = Color.Green;
+                    
+                    logHata?.Invoke("Seri port bağlantısı kuruldu: " + serialPort.PortName, false);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bağlantı kurulamadı: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logHata?.Invoke("Seri port bağlantısı kurulamadı: " + ex.Message, true);
+                kesButonu.Enabled = true; // Kes butonunu etkinleştir
+            }
+        }
+        
+        /// <summary>
+        /// Seri port bağlantısını kesme olayı
+        /// </summary>
+        private void Kes_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Zamanlayıcıyı durdur
+                zamanlayici.Stop();
+                
+                // Port açıksa kapat
+                if (serialPort.IsOpen)
+                {
+                    serialPort.Close();
+                }
+                
+                kesButonu.Enabled = false; // "Kes" butonunu tıklanamaz yap
+                baglanButonu.Enabled = true; // "Bağlan" butonunu tıklanabilir yap
+                
+                // Durum etiketini güncelle
+                durumEtiketi.Text = "Bağlantı kesildi";
+                durumEtiketi.ForeColor = Color.Red;
+                
+                logHata?.Invoke("Seri port bağlantısı kesildi", false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bağlantıyı keserken hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logHata?.Invoke("Seri port bağlantısı kesilirken hata: " + ex.Message, true);
+            }
+        }
+        
+        /// <summary>
+        /// Zamanlayıcı tetiklendiğinde telemetri verilerini okuma ve işleme metodu
+        /// </summary>
+        private void Zamanlayici_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                // Port açık değilse işlem yapma
+                if (!serialPort.IsOpen)
+                {
+                    return;
+                }
+                
+                // Seri porttan veri okuma
+                string[] paket;
+                string sonuc = serialPort.ReadLine(); // Seri porttan bir satır oku
+                
+                // Telemetri verisini işle
+                IsleVeGoruntuleTelemetriVerisi(sonuc);
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("Telemetri verileri okunurken hata: " + ex.Message, true);
+            }
+        }
+        
+        /// <summary>
+        /// Seri porttan veri alındığında çalışan metod
+        /// </summary>
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                // Veriyi oku
+                string veri = serialPort.ReadLine();
+                
+                // Veriyi işlemek için UI thread'ine gönder
+                if (dataGridView.InvokeRequired)
+                {
+                    dataGridView.Invoke(new Action(() =>
+                    {
+                        IsleVeGoruntuleTelemetriVerisi(veri);
+                    }));
+                }
+                else
+                {
+                    IsleVeGoruntuleTelemetriVerisi(veri);
+                }
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("Seri porttan veri okunurken hata: " + ex.Message, true);
+            }
+        }
+        
+        /// <summary>
+        /// Telemetri verisini işle ve UI'da göster
+        /// </summary>
+        private void IsleVeGoruntuleTelemetriVerisi(string telemetriVerisi)
+        {
+            try
+            {
+                // Telemetri formatı:
+                // <PAKET NUMARASI>, <UYDU STATÜSÜ>, <HATA KODU>, <GÖNDERME SAATI>, <BASINÇ1>, <BASINÇ2>, <YÜKSEKLIK1>, <YÜKSEKLIK2>, 
+                // <IRTIFA FARKI>, <INIŞ HIZI>, <SICAKLIK>, <PIL GERILIMI>, <GPS1 LATITUDE>, <GPS1 LONGITUDE>, <GPS1 ALTITUDE>, 
+                // <PITCH>, <ROLL>, <YAW>, <RHRH>, <IOT S1 DATA>, <IOT S2 DATA>, <TAKIM NO>
+                
+                // Veriyi virgülle ayır
+                string[] paket = telemetriVerisi.Split(',');
+                
+                // Paket boyutu kontrolü
+                if (paket.Length < 22)
+                {
+                    logHata?.Invoke($"Eksik telemetri paketi alındı. Beklenen: 22, Alınan: {paket.Length}", false);
+                    return;
+                }
+                
+                // Telemetri verilerini işle
+                string paketNo = paket[0].Trim();
+                string uyduStatusu = paket[1].Trim();
+                string hataKodu = paket[2].Trim();
+                string gondermeSaati = paket[3].Trim();
+                string basinc1 = paket[4].Trim();
+                string basinc2 = paket[5].Trim();
+                string yukseklik1 = paket[6].Trim();
+                string yukseklik2 = paket[7].Trim();
+                string irtifaFarki = paket[8].Trim();
+                string inisHizi = paket[9].Trim();
+                string sicaklik = paket[10].Trim();
+                string pilGerilimi = paket[11].Trim();
+                string gpsLatitude = paket[12].Trim();
+                string gpsLongitude = paket[13].Trim();
+                string gpsAltitude = paket[14].Trim();
+                string pitch = paket[15].Trim();
+                string roll = paket[16].Trim();
+                string yaw = paket[17].Trim();
+                string rhrh = paket[18].Trim();
+                
+                // IoT verileri
+                double iotS1Sicaklik = 0.0;
+                double iotS2Sicaklik = 0.0;
+                
+                if (paket.Length >= 21)
+                {
+                    try
+                    {
+                        iotS1Sicaklik = Convert.ToDouble(paket[19].Trim());
+                        iotS2Sicaklik = Convert.ToDouble(paket[20].Trim());
+                    }
+                    catch (Exception)
+                    {
+                        // IoT verileri okunamazsa devam et
+                    }
+                }
+                
+                // Takım No
+                string takimNo = paket.Length >= 22 ? paket[21].Trim() : "14534";
+                
+                // UI kontrollerini güncelle
+                GuncelleUIKontrolleri(paket);
+                
+                // DataGridView'a veri ekle
+                EkleDataGridView(paket);
+                
+                // Grafiği güncelle
+                DateTime simdikiZaman = DateTime.Now;
+                grafikleriGuncelle?.Invoke(simdikiZaman, sicaklik, yukseklik1, basinc1, inisHizi, pilGerilimi);
+                
+                // Haritayı güncelle (GPS koordinatları)
+                if (double.TryParse(gpsLatitude, out double lat) && 
+                    double.TryParse(gpsLongitude, out double lng))
+                {
+                    haritaGuncelle?.Invoke(lat, lng);
+                }
+                
+                // 3D model için gyro değerlerini güncelle
+                try
+                {
+                    int pitchValue = Convert.ToInt32(pitch);
+                    int rollValue = Convert.ToInt32(roll);
+                    int yawValue = Convert.ToInt32(yaw);
+                    
+                    gyroGuncelle?.Invoke(pitchValue, rollValue, yawValue);
+                }
+                catch (Exception)
+                {
+                    // Gyro değerleri dönüştürülemezse devam et
+                }
+                
+                // Uydu durumunu güncelle
+                uyduDurumGuncelle?.Invoke(uyduStatusu);
+                
+                // Hata kodunu güncelle
+                if (hataKodu.Length == 6 && hataKodu.All(c => c == '0' || c == '1'))
+                {
+                    hataKoduGuncelle?.Invoke(hataKodu);
+                }
+                
+                // Telemetri verilerini kaydet
+                telemetriKaydet?.Invoke(telemetriVerisi);
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("Telemetri verisi işlenirken hata: " + ex.Message, true);
+            }
+        }
+        
+        /// <summary>
+        /// UI kontrollerini (TextBox'ları) güncelle
+        /// </summary>
+        private void GuncelleUIKontrolleri(string[] paket)
+        {
+            try
+            {
+                // Genel alanları güncelle
+                if (veriKontrolleri.ContainsKey("paketNo"))
+                    AyarlaKontrolDegeri(veriKontrolleri["paketNo"], paket[0].Trim());
+                
+                if (veriKontrolleri.ContainsKey("uyduStatusu"))
+                    AyarlaKontrolDegeri(veriKontrolleri["uyduStatusu"], paket[1].Trim());
+                
+                if (veriKontrolleri.ContainsKey("hataKodu"))
+                    AyarlaKontrolDegeri(veriKontrolleri["hataKodu"], paket[2].Trim());
+                
+                if (veriKontrolleri.ContainsKey("gondermeSaati"))
+                    AyarlaKontrolDegeri(veriKontrolleri["gondermeSaati"], paket[3].Trim());
+                
+                // Basınç değerleri
+                if (veriKontrolleri.ContainsKey("basinc1"))
+                    AyarlaKontrolDegeri(veriKontrolleri["basinc1"], paket[4].Trim());
+                
+                if (veriKontrolleri.ContainsKey("basinc2"))
+                    AyarlaKontrolDegeri(veriKontrolleri["basinc2"], paket[5].Trim());
+                
+                // Yükseklik değerleri
+                if (veriKontrolleri.ContainsKey("yukseklik1"))
+                    AyarlaKontrolDegeri(veriKontrolleri["yukseklik1"], paket[6].Trim());
+                
+                if (veriKontrolleri.ContainsKey("yukseklik2"))
+                    AyarlaKontrolDegeri(veriKontrolleri["yukseklik2"], paket[7].Trim());
+                
+                // İrtifa farkı
+                if (veriKontrolleri.ContainsKey("irtifaFarki"))
+                    AyarlaKontrolDegeri(veriKontrolleri["irtifaFarki"], paket[8].Trim());
+                
+                // İniş hızı
+                if (veriKontrolleri.ContainsKey("inisHizi"))
+                    AyarlaKontrolDegeri(veriKontrolleri["inisHizi"], paket[9].Trim());
+                
+                // GPS verileri
+                if (veriKontrolleri.ContainsKey("gpsLatitude"))
+                    AyarlaKontrolDegeri(veriKontrolleri["gpsLatitude"], paket[12].Trim());
+                
+                if (veriKontrolleri.ContainsKey("gpsLongitude"))
+                    AyarlaKontrolDegeri(veriKontrolleri["gpsLongitude"], paket[13].Trim());
+                
+                if (veriKontrolleri.ContainsKey("gpsAltitude"))
+                    AyarlaKontrolDegeri(veriKontrolleri["gpsAltitude"], paket[14].Trim());
+                
+                // Gyro verileri
+                if (veriKontrolleri.ContainsKey("pitch"))
+                    AyarlaKontrolDegeri(veriKontrolleri["pitch"], paket[15].Trim());
+                
+                if (veriKontrolleri.ContainsKey("roll"))
+                    AyarlaKontrolDegeri(veriKontrolleri["roll"], paket[16].Trim());
+                
+                if (veriKontrolleri.ContainsKey("yaw"))
+                    AyarlaKontrolDegeri(veriKontrolleri["yaw"], paket[17].Trim());
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("UI kontrolleri güncellenirken hata: " + ex.Message, false);
+            }
+        }
+        
+        /// <summary>
+        /// Control değerini thread-safe şekilde ayarla
+        /// </summary>
+        private void AyarlaKontrolDegeri(Control kontrol, string deger)
+        {
+            if (kontrol.InvokeRequired)
+            {
+                kontrol.Invoke(new Action(() => {
+                    if (kontrol is TextBox)
+                        ((TextBox)kontrol).Text = deger;
+                    else if (kontrol is Label)
+                        ((Label)kontrol).Text = deger;
+                }));
+            }
+            else
+            {
+                if (kontrol is TextBox)
+                    ((TextBox)kontrol).Text = deger;
+                else if (kontrol is Label)
+                    ((Label)kontrol).Text = deger;
+            }
+        }
+        
+        /// <summary>
+        /// DataGridView'a telemetri verilerini ekleyen metod
+        /// </summary>
+        private void EkleDataGridView(string[] paket)
+        {
+            try
+            {
+                // DataGridView yoksa işlem yapma
+                if (dataGridView == null)
+                    return;
+                
+                // Invoke gerekiyorsa
+                if (dataGridView.InvokeRequired)
+                {
+                    dataGridView.Invoke(new Action(() => {
+                        EkleDataGridViewSatir(paket);
+                    }));
+                }
+                else
+                {
+                    EkleDataGridViewSatir(paket);
+                }
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("DataGridView'e veri eklenirken hata: " + ex.Message, false);
+            }
+        }
+        
+        /// <summary>
+        /// DataGridView'e yeni bir satır ekler (Thread-safe değil)
+        /// </summary>
+        private void EkleDataGridViewSatir(string[] paket)
+        {
+            try
+            {
+                // Hücrelerin sayısı kontrol et
+                if (dataGridView.Columns.Count < paket.Length)
+                {
+                    logHata?.Invoke("DataGridView sütun sayısı telemetri veri sayısından az", false);
+                    return;
+                }
+                
+                // Yeni satır ekle
+                int satir = dataGridView.Rows.Add();
+                
+                // Tüm hücreleri doldur
+                for (int i = 0; i < paket.Length && i < dataGridView.Columns.Count; i++)
+                {
+                    dataGridView.Rows[satir].Cells[i].Value = paket[i].Trim();
+                }
+                
+                // Son satıra kaydır
+                dataGridView.FirstDisplayedScrollingRowIndex = dataGridView.Rows[dataGridView.Rows.Count - 1].Index;
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("DataGridView satırı eklenirken hata: " + ex.Message, false);
+            }
+        }
+        
+        /// <summary>
+        /// Manuel komut gönderme
+        /// </summary>
+        public void GonderKomut(string komut)
+        {
+            try
+            {
+                // Port açık değilse
+                if (!serialPort.IsOpen)
+                {
+                    serialPort.Open();
+                }
+                
+                // Komutu gönder
+                serialPort.Write(komut);
+                
+                logHata?.Invoke("Komut gönderildi: " + komut, false);
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("Komut gönderilirken hata: " + ex.Message, true);
+            }
+        }
+        
+        /// <summary>
+        /// Kaynakları temizleme metodu
+        /// </summary>
+        public void Dispose()
+        {
+            try
+            {
+                // Zamanlayıcıyı durdur
+                if (zamanlayici != null)
+                {
+                    zamanlayici.Stop();
+                    zamanlayici.Dispose();
+                }
+                
+                // Seri portu kapat
+                if (serialPort != null && serialPort.IsOpen)
+                {
+                    serialPort.Close();
+                    serialPort.Dispose();
+                }
+                
+                logHata?.Invoke("TelemetriYoneticisi kaynakları temizlendi", false);
+            }
+            catch (Exception ex)
+            {
+                logHata?.Invoke("TelemetriYoneticisi kaynakları temizlenirken hata: " + ex.Message, true);
+            }
+        }
+    }
+} 

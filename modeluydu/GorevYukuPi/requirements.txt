@@ -1,0 +1,33 @@
+# TÜRKSAT Model Uydu Projesi - Python Dependencies
+# ==================================================
+
+# I2C, SPI ve GPIO kontrolü için temel kütüphaneler
+RPi.GPIO>=0.7.0
+smbus2>=0.4.0
+spidev>=3.5
+
+# Seri haberleşme (XBee, GPS) için
+pyserial>=3.5
+
+# Kamera yönetimi için
+picamera2>=0.3.0
+
+# BMP280 sensör kütüphanesi
+# NOT: Bu projede BMP280 doğrudan I2C (smbus2) ile okuduğu için
+# adafruit kütüphanesi gerekli değil, smbus2 yeterli
+# adafruit-circuitpython-bmp280>=3.2.0  # İhtiyaç halinde
+
+# JSON ve tarih/saat işlemleri (Built-in ama belirtmek iyi)
+# datetime - built-in Python modülü
+# json - built-in Python modülü
+
+# GPS modülü için kütüphane
+pynmea2>=1.18.0  # NMEA GPS data parsing
+
+# ADC kütüphanesi - PCF8591 yerine ADS1115 kullanıyoruz
+adafruit-circuitpython-ads1x15>=2.2.0  # ADS1115 16-bit ADC için
+
+# RTC kütüphanesi - DS3231 Real-Time Clock için
+# DS3231 smbus2 ile erişilebilir - ek kütüphane gerekmez
+
+
