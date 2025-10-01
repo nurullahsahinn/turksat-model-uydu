@@ -8,6 +8,8 @@
 ![Platform](https://img.shields.io/badge/Platform-Raspberry%20Pi%20Zero%202W-green?style=for-the-badge)
 ![Durum](https://img.shields.io/badge/Durum-Uçuşa%20Hazır-success?style=for-the-badge)
 
+[▶️ Model Uydu Tanıtım Videosu (LinkedIn)](https://www.linkedin.com/posts/nurullahsahinn_taesrksat-teknofest-modeluydu-activity-7361415194155040769-peXQ?utm_source=share&utm_medium=member_desktop&rcm=ACoAADk6ykIBxQMI8iO9VxnYcCEeqIe3bIY4YS8)
+
 **Sıfırdan geliştirilen, uçtan uca model uydu yazılım mimarisi**  
 *Tam otomatik telemetri, video akışı, IoT haberleşme ve ayrılma kontrolü*
 
