@@ -1787,6 +1787,8 @@ SOFTWARE.
 
 ---
 
+> Not: Bu depodaki tüm yazılım bileşenleri (yer istasyonu, görev yükü, IoT istasyonları vb.) Nurullah Şahin tarafından sıfırdan geliştirilmiştir. Donanım, mekanik tasarım, PCB ve elektrik üretim süreçleri takım arkadaşları tarafından yürütülmüş olup bu depoda yalnızca yazılım yer almaktadır.
+
 ## 📊 İstatistikler
 
 - 📝 **Kod Satırları:** ~15,000+
