@@ -66,7 +66,7 @@
 
 ## 🌟 Genel Bakış
 
-Bu proje, **TÜRKSAT Model Uydu Yarışması 2025** için geliştirilmiş tam otomatik bir görev yükü sistemidir. Sistem, balon ile 700m yüksekliğe çıkartılan model uydudan ayrılarak kendi paraşütüyle inerken gerçek zamanlı telemetri, video ve IoT verilerini yer istasyonuna iletir.
+Bu proje, **TÜRKSAT Model Uydu Yarışması 2025** için geliştirilmiş tam otomatik bir görev yükü sistemidir. Sistem, roket ile 700m yüksekliğe çıkartılan model uydudan ayrılarak kendi paraşütüyle inerken gerçek zamanlı telemetri, video ve IoT verilerini yer istasyonuna iletir.
 
 ### 🎯 Proje Hedefleri
 
@@ -1828,4 +1828,5 @@ SOFTWARE.
 `#TÜRKSAT` `#TEKNOFEST` `#ModelUydu` `#EmbeddedSystems` `#IoT` `#Python` `#CSharp` `#Arduino` `#RaspberryPi` `#XBee` `#Telemetry` `#SpaceTechnology` `#Engineering` `#RealTimeData` `#MultiThreading` `#VideoStreaming` `#SensorFusion` `#WirelessCommunication` `#SystemIntegration` `#FaultTolerant`
 
 </div>
+
 
