@@ -19,6 +19,9 @@
 <img src="./images/4.png" width="260" />
 <img src="./images/5.png" width="260" />
 <img src="./images/6.jpg" width="260" />
+<br/>
+<img src="./images/7.jpg" width="260" />
+<img src="./images/8.jpg" width="260" />
 
 </div>
 
