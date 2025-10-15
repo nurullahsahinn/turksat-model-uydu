@@ -66,14 +66,14 @@
 
 ## 🌟 Genel Bakış
 
-Bu proje, **TÜRKSAT Model Uydu Yarışması 2025** için geliştirilmiş tam otomatik bir görev yükü sistemidir. Sistem, roket ile 700m yüksekliğe çıkartılan model uydudan ayrılarak kendi paraşütüyle inerken gerçek zamanlı telemetri, video ve IoT verilerini yer istasyonuna iletir.
+Bu proje, **TÜRKSAT Model Uydu Yarışması 2025** için geliştirilmiş tam otomatik bir görev yükü sistemidir. Sistem, balon ile 700m yüksekliğe çıkartılan model uydudan ayrılarak kendi paraşütüyle inerken gerçek zamanlı telemetri, video ve IoT verilerini yer istasyonuna iletir.
 
 ### 🎯 Proje Hedefleri
 
 - ✅ **1 Hz frekansında** kesintisiz telemetri gönderimi
-- ✅ **Gerçek zamanlı video akışı** (240x180@3fps) XBee üzerinden
+ - ✅ **Gerçek zamanlı video akışı** (240x180@2fps) XBee üzerinden
 - ✅ **SD karta yüksek kaliteli video kaydı** (640x480@15fps H.264/MP4)
-- ✅ **IoT S2S (Station-to-Satellite)** bonus görevi - 412-707m mesafe
+- ✅ **IoT S2S (Station-to-Satellite)** bonus görevi – uçuş boyunca 1 Hz tek yönlü IoT sıcaklık verisinin iki istasyondan görev yüküne iletilmesi, görev yükünde SD karta yazılması ve yer istasyonunda grafiklenmesi
 - ✅ **SAHA (Sistemler Arası Haberleşme Ağı)** protokolü
 - ✅ **ARAS (Arayüz Alarm Sistemi)** ile hata izleme
 - ✅ **Multi-spektral filtreleme** (opsiyonel)
@@ -192,13 +192,13 @@ Bu proje kapsamında:
 - **BMP280** sıcaklık sensörü (I2C 0x76)
 - **XBee 3 Pro** (MY=0x0004, Kanal 12)
 - SoftwareSerial (Pin 2/3)
-- 412-707m mesafe iletişimi
+- Uçuş boyunca kararlı RF iletişimi
 
 #### İstasyon #2 (Arduino Mega 2560)
 - **BMP280** sıcaklık sensörü (I2C 0x77)
 - **XBee 3 Pro** (MY=0x0005, Kanal 13)
 - Hardware Serial1 (Pin 18/19) - daha stabil
-- 412-707m mesafe iletişimi
+- Uçuş boyunca kararlı RF iletişimi
 
 ### 💻 Yer İstasyonu (C# Windows Forms)
 
@@ -270,7 +270,7 @@ Bu proje kapsamında:
          │  İstasyon #1 (Nano)    İstasyon #2 (Mega)│
          │  • BMP280              • BMP280           │
          │  • XBee (Kanal 12)     • XBee (Kanal 13) │
-         │  412-707m Mesafe  →  Görev Yükü          │
+         │  IoT İstasyonları  →  Görev Yükü          │
          └────────────────────────────────────────────┘
 ```
 
@@ -457,7 +457,7 @@ modeluydu/
 • SoftwareSerial XBee (Pin 2/3)
 • XBee API Frame gönderimi
 • 1 Hz veri aktarımı
-• Mesafe: 412-707m
+• 1 Hz yayın: uçuş boyunca tek yönlü IoT sıcaklık verisi
 ```
 
 #### IoT İstasyon #2 - `IoTStation2_Mega.ino`
@@ -468,7 +468,7 @@ modeluydu/
 • Hardware Serial1 XBee (Pin 18/19)
 • XBee API Frame gönderimi
 • 1 Hz veri aktarımı
-• Mesafe: 412-707m
+• 1 Hz yayın: uçuş boyunca tek yönlü IoT sıcaklık verisi
 • Daha stabil Serial1 kullanımı
 ```
 
@@ -1059,7 +1059,7 @@ python video_debug_test.py
 **XBee Mesh:**
 ```bash
 # Yer İstasyonu → Telemetri sekmesi
-✅ Görev yükü telemetrisi gelmiyor
+✅ Görev yükü telemetrisi geliyor
 ✅ IoT #1 sıcaklığı: 24.5°C
 ✅ IoT #2 sıcaklığı: 25.2°C
 ```
@@ -1656,7 +1656,7 @@ TÜRKSAT Model Uydu Yarışması bize yalnızca teknik bilgi değil, aynı zaman
 - Simple text-based format: `SAHA:BASINC2:<pascal>`
 
 ##### **IoT S2S (Station-to-Satellite)**
-- 412-707m mesafede XBee mesh network
+- Uçuş boyunca kesintisiz IoT veri iletimi (XBee 802.15.4)
 - 2 yer istasyonundan görev yüküne sıcaklık verisi
 - Farklı kanallar (12, 13) ile interference önleme
 
@@ -1729,7 +1729,7 @@ TÜRKSAT Model Uydu Yarışması bize yalnızca teknik bilgi değil, aynı zaman
 - ✅ **Şartname uyumu:** %100 gereksinim karşılama
 - ✅ **Hata toleransı:** Sıfır kritik hata
 - ✅ **Video sistemi:** İkili sistem (kayıt + stream)
-- ✅ **IoT bonus:** 412-707m mesafede başarılı iletişim
+- ✅ **IoT bonus:** Uçuş boyunca kesintisiz veri iletimi başarıyla sağlandı
 - ✅ **ARAS sistemi:** 6-bit hata izleme aktif
 - ✅ **Otomasyon:** Tam otomatik uçuş profili
 - ✅ **Dokümantasyon:** Kapsamlı teknik raporlama
@@ -1828,5 +1828,4 @@ SOFTWARE.
 `#TÜRKSAT` `#TEKNOFEST` `#ModelUydu` `#EmbeddedSystems` `#IoT` `#Python` `#CSharp` `#Arduino` `#RaspberryPi` `#XBee` `#Telemetry` `#SpaceTechnology` `#Engineering` `#RealTimeData` `#MultiThreading` `#VideoStreaming` `#SensorFusion` `#WirelessCommunication` `#SystemIntegration` `#FaultTolerant`
 
 </div>
-
 
